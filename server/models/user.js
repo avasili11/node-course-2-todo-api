@@ -30,7 +30,7 @@ var UserSchema = new mongoose.Schema({
       required: true
     }
   }]
-});
+}, {usePuchEach:true});
 
 UserSchema.methods.toJSON = function () {
   var user = this;
@@ -44,7 +44,7 @@ UserSchema.methods.generateAuthToken = function () {
   var access = 'auth';
   var token = jwt.sign({_id: user._id.toHexString(), access}, 'abc123').toString();
 
-  user.tokens.push({access, token});
+  user.tokens.concat({access, token});
 
   return user.save().then(() => {
     return token;
